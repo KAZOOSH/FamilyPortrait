@@ -1,0 +1,19 @@
+[
+	{
+		"type":"Canon",
+		"id":"Capture",
+		"inputs":["FamilyPortrait"]
+	},
+	{
+		"type":"FamilyPortrait",
+		"inputs":["Capture","Greenscreen"]
+	},
+	{
+		"type":"Greenscreen",
+		"inputs":["FamilyPortrait"]
+	},
+	{
+		"type":"PictureExporter",
+		"inputs":["FamilyPortrait"]
+	}
+]

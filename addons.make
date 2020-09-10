@@ -1,0 +1,17 @@
+ofxAnimatable
+ofxAssetManager
+ofxCanon
+ofxCv
+ofxEasing
+ofxFontStash2
+ofxInterface
+ofxInterfaceCanvas
+ofxModule
+ofxModuleCanon
+ofxModuleGreenscreen
+ofxModulePictureExporter
+ofxModuleWebcam
+ofxOpenCv
+ofxPoco
+ofxTextureRecorder
+ofxVideoRecorder
