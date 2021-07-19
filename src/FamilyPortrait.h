@@ -56,6 +56,8 @@ namespace ofxModule {
 		int currentLayer = 0;
 
 		vector<ExportOption> exportOptions;
+		
+		long lastphoto = 0;
 	};
 }
 
