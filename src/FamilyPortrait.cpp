@@ -137,8 +137,9 @@ namespace ofxModule {
 	}
 	void FamilyPortrait::keyPressed(ofKeyEventArgs & e)
 	{
-		if (e.key == 'p') {
+		if (ofGetElapsedTimeMillis() - lastphoto > 4000) {
 			startCapture();
+			lastphoto = ofGetElapsedTimeMillis();
 		}
 
 		if (e.key == 'f') {
