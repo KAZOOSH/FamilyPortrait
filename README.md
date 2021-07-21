@@ -20,7 +20,6 @@ Rename the ```addons_<system you are compiling on>.make``` to ```addons.make```.
 ## Required Addons
 
 * [ofxAnimatable](https://github.com/armadillu/ofxAnimatable)
-* [ofxAssetManager](https://github.com/reddoLabs/ofxAssetManager)
 * [ofxCv](https://github.com/kylemcdonald/ofxCv)
 * [ofxEasing](https://github.com/arturoc/ofxEasing)
 * [ofxModule](https://github.com/reddoLabs/ofxModule)

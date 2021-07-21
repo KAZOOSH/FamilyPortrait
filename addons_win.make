@@ -1,5 +1,4 @@
 ofxAnimatable
-ofxAssetManager
 ofxCanon
 ofxCv
 ofxEasing
