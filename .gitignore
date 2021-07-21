@@ -1,4 +1,4 @@
-
+addons.make
 bin/*
 !bin/data/modules.json
 !bin/data/settings.json
