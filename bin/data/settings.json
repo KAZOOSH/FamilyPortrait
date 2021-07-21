@@ -1,12 +1,12 @@
 {
     "Greenscreen": {
         "greenscreenSettings": {
-            "Hintergrundfarbe_aktualisieren": "0",
+            "Hintergrundfarbe_aktualisieren": "1",
             "alle_Masken": "0",
             "baseMaskClip_b_w_": "0.2, 0.6",
             "baseMaskStrength": "0.37",
-            "bgColor": "0.127345, 0.855114, 0.160521, 1",
-            "bgColorPos": "268, 91.3333",
+            "bgColor": "0.0871961, 0.471569, 0.14851, 1",
+            "bgColorPos": "470.756, 280.178",
             "bgColorROIsize": "20",
             "blurValue": "1000",
             "chromaMaskStrength": "0.5",
@@ -27,24 +27,23 @@
             "exportFolder": [
                 {
                     "folder": "c:/temp",
-                    "purpose":"save"
+                    "purpose": "save"
                 }
             ],
-            "dimensions":[
-                1920,1080
+            "dimensions": [
+                1920,
+                1080
             ],
-            "nLayers":50,
+            "liveViewBorder": [
+                0,
+                43
+            ],
+            "photoCapture": true,
+            "nLayers": 50,
             "fullscreen": false,
             "windowPosition": [
                 100,
                 200
-            ]
-        },
-        "picture": {
-            "pictureFormat": 1.5,
-            "dimCanvas": [
-                3000,
-                3000
             ]
         }
     },
@@ -60,21 +59,21 @@
                 "width": 1844,
                 "height": 1240,
                 "outputType": "png",
-                "fit":"fill"
+                "fit": "fill"
             }
         ],
-        "capture":{
-            "file":"capture.mov",
-            "codec":"hap -format hap_alpha",
-            "bitrate":"",
-            "framerate":30,
-            "extraSettings":""
+        "capture": {
+            "file": "capture.mov",
+            "codec": "hap -format hap_alpha",
+            "bitrate": "",
+            "framerate": 30,
+            "extraSettings": ""
         }
     },
     "Capture": {
-        "streamingMethod": "texture",
-        "mirrorY":false,
-        "mirrorX":true,
-        "rotate":0
+        "streamingMethod": "both",
+        "mirrorY": false,
+        "mirrorX": true,
+        "rotate": 0
     }
 }

@@ -1,19 +1,27 @@
 [
 	{
-		"type":"Canon",
-		"id":"Capture",
-		"inputs":["FamilyPortrait"]
+		"type": "Camera",
+		"id": "Capture",
+		"inputs": [
+			"FamilyPortrait"
+		]
 	},
 	{
-		"type":"FamilyPortrait",
-		"inputs":["Capture","Greenscreen"]
+		"type": "FamilyPortrait",
+		"inputs": [
+			"Greenscreen"
+		]
 	},
 	{
-		"type":"Greenscreen",
-		"inputs":["FamilyPortrait"]
+		"type": "Greenscreen",
+		"inputs": [
+			"Capture"
+		]
 	},
 	{
-		"type":"PictureExporter",
-		"inputs":["FamilyPortrait"]
+		"type": "PictureExporter",
+		"inputs": [
+			"FamilyPortrait"
+		]
 	}
 ]

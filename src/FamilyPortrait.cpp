@@ -1,6 +1,5 @@
 #include "FamilyPortrait.h"
 
-using namespace ofxInterface;
 
 namespace ofxModule {
 	FamilyPortrait::FamilyPortrait(string moduleName, string settingsPath) :ModuleDrawable(moduleName, moduleName, settingsPath)
@@ -9,7 +8,6 @@ namespace ofxModule {
 		ofSetWindowShape(settings["general"]["dimensions"][0], settings["general"]["dimensions"][1]);
 		ofSetFullscreen(settings["general"]["fullscreen"].get<bool>());
 
-		initGui();
 		initPictureExporter();
 
 		ofAddListener(ofEvents().keyPressed, this, &FamilyPortrait::keyPressed);
@@ -21,88 +19,43 @@ namespace ofxModule {
 	}
 	void FamilyPortrait::draw()
 	{
-		scene->render();
+		ofRectangle out = ofRectangle(0,0,ofGetWidth(),ofGetHeight());
+		if(textures.size()>0){
+			ofRectangle in = ofRectangle(0,0, textures.front().getWidth(),textures.front().getHeight());
+
+			in.scaleTo(out);
+
+			for(auto& tex:textures){
+				tex.draw(in);
+			}
+
+		}
+
+		ofRectangle inc = ofRectangle(0,0, camTexture.getWidth(),camTexture.getHeight());
+		inc.scaleTo(out);
+		camTexture.draw(inc);
+
+
+		if(isStartCapture){
+			isStartCapture = false;
+			ofSetColor(255,210);
+			ofDrawRectangle(0,0,ofGetWidth(),ofGetHeight());
+			startCapture();
+			lastphoto = ofGetElapsedTimeMillis();
+		}
+
+		if(ofGetElapsedTimeMillis() - lastphoto < 500){
+			int v = ofGetElapsedTimeMillis() - lastphoto;
+			ofSetColor(255,ofxeasing::map_clamp(v,0,500,210,0,ofxeasing::cubic::easeOut));
+			ofDrawRectangle(0,0,ofGetWidth(),ofGetHeight());
+			ofSetColor(255);
+		}
+
 	}
 	void FamilyPortrait::stopModule()
 	{
 	}
-	void FamilyPortrait::initGui()
-	{
 
-
-		// the scene
-		NodeSettings s;
-		s.name = "scene";
-		s.size = ofVec2f(settings["general"]["dimensions"][0], settings["general"]["dimensions"][1]);
-
-		scene = new Node();
-		scene->setup(s);
-
-		// the canvas to work with
-		ofRectangle rMax(0, 0, settings["picture"]["dimCanvas"][0].get<int>(), settings["picture"]["dimCanvas"][1].get<int>());
-		ofRectangle rRef(0, 0, settings["picture"]["pictureFormat"].get<float>() * 100.0f, 100.0f);
-		rRef.scaleTo(rMax, OF_SCALEMODE_FIT);
-
-		canvas = new Canvas();
-		canvas->setup(round(rRef.width), round(rRef.height));
-
-
-		CanvasRefNode* ref = new CanvasRefNode();
-		ref->setup(scene->getWidth(), scene->getHeight(), canvas);
-
-		scene->addChild(ref);
-
-		// add picture layers to canvas
-		Layer* layerPictures = new ofxInterface::Layer();
-		LayerSettings lSettings = LayerSettings(canvas->getWidth(), canvas->getHeight(), "pictures");
-		layerPictures->setup(lSettings);
-		canvas->addLayer(layerPictures);
-
-		Layer* layerCam = new ofxInterface::Layer();
-		lSettings.name = "cam";
-		layerCam->setup(lSettings);
-		canvas->addLayer(layerCam);
-
-		for (size_t i = 0; i < settings["general"]["nLayers"].get<int>(); i++)
-		{
-			ofFbo fbo;
-			fbo.allocate(canvas->getWidth(), canvas->getHeight());
-			fbo.begin();
-			ofClear(0, 0);
-			fbo.end();
-			fbos.push_back(fbo);
-
-			TextureNode* n = new TextureNode();
-			TextureNodeSettings ns;
-			ns.name = ofToString(i);
-			ns.plane = i;
-			ns.size = canvas->getSize();
-			ns.texture = fbos.back().getTexture();
-			n->setup(ns);
-			layerPictures->addChild(n);
-		}
-
-		camTexture = new TextureNode();
-		TextureNodeSettings ns;
-		ns.name = "pic";
-		ns.plane = 300;
-		ns.size = canvas->getSize();
-		camTexture->setup(ns);
-		layerCam->addChild(camTexture);
-
-		// flash
-		ColorPanelSettings cps;
-		cps.size = canvas->getSize();
-		cps.plane = 10000;
-		cps.bgColor = ofColor(255);
-		cps.isActive = false;
-
-		flash = new ColorPanel();
-		flash->setup(cps);
-		scene->addChild(flash);
-
-		
-	}
 	void FamilyPortrait::initPictureExporter()
 	{
 		auto exportSettings = settings["PictureExporter"];
@@ -137,9 +90,9 @@ namespace ofxModule {
 	}
 	void FamilyPortrait::keyPressed(ofKeyEventArgs & e)
 	{
-		if (ofGetElapsedTimeMillis() - lastphoto > 4000) {
-			startCapture();
-			lastphoto = ofGetElapsedTimeMillis();
+		if (e.key == 'p' && ofGetElapsedTimeMillis() - lastphoto > 500 && !isCaptureRunning) {
+			isStartCapture = true;
+
 		}
 
 		if (e.key == 'f') {
@@ -156,59 +109,41 @@ namespace ofxModule {
 	}
 	void FamilyPortrait::proceedModuleEvent(ModuleEvent & e)
 	{
-		if ((e.id == "Capture")) {
-			notifyEvent(e);
-		}
-		else {
-			camTexture->setTexture(*e.texture);
 
+
+			//camTexture = *e.texture;
 				if (isCaptureRunning) {
-					// when using a canon slr and singleshot wait for the correct photo
-					if (e.moduleClass == "Canon") {
-						if (e.address == "photo") {
-							fbos[currentLayer].begin();
+							if (textures.size() > settings["general"]["nLayers"].get<int>()){
+								textures.pop_front();
+							}
+
+							int h = settings["general"]["dimensions"][1];
+							int w = h*e.texture->getWidth()/e.texture->getHeight();
+
+							textures.push_back(ofFbo());
+							textures.back().allocate(w,h);
+							textures.back().begin();
 							ofClear(0, 0);
-							camTexture->draw();
-							fbos[currentLayer].end();
-							
-						}
-					}
-					else {
-						fbos[currentLayer].begin();
-						ofClear(0, 0);
-						camTexture->draw();
-						fbos[currentLayer].end();
+							e.texture->draw(0,0,w,h);
+							textures.back().end();
 
-					}
-					
-					exportImage(make_shared<ofFbo>( fbos[currentLayer]), "save");
+					exportImage(make_shared<ofFbo>( textures.back()), "save");
 
-					flash->deactivate();
-					updateLayerSorting();
+					//flash->deactivate();
 					isCaptureRunning = false;
-					currentLayer++;
-					currentLayer%settings["general"]["nLayers"].get<int>();
+					lastphoto = ofGetElapsedTimeMillis();
 
+		}else{
+					if(!camTexture.isAllocated()){
+						camTexture.allocate(e.texture->getWidth()- settings["general"]["liveViewBorder"][0].get<int>()*2,e.texture->getHeight()- settings["general"]["liveViewBorder"][1].get<int>()*2);
+					}
+					camTexture.begin();
+					ofClear(0,0);
+					e.texture->draw(- settings["general"]["liveViewBorder"][0].get<int>(),- settings["general"]["liveViewBorder"][1].get<int>());
+					camTexture.end();
 				}
-		}
 	}
-	void FamilyPortrait::updateLayerSorting()
-	{
-		auto layers = canvas->getChildWithName("pictures")->getChildren();
 
-		int lTemp = settings["general"]["nLayers"].get<int>();
-
-		for (size_t i = currentLayer; i < layers.size(); i++)
-		{
-			layers[i]->setPlane(lTemp);
-			--lTemp;
-		}
-		for (size_t i = 0; i < currentLayer; i++)
-		{
-			layers[i]->setPlane(lTemp);
-			--lTemp;
-		}
-	}
 	void FamilyPortrait::stopStream()
 	{
 		ofJson msg;
@@ -227,12 +162,15 @@ namespace ofxModule {
 	}
 	void FamilyPortrait::startCapture()
 	{
-		isCaptureRunning = true;
-		flash->activate();
 
+		isCaptureRunning = true;
+		//flash->activate();
+		if(settings["general"]["photoCapture"].get<bool>()){
 			ModuleEvent e = ModuleEvent(moduleClass, moduleName, "capture", ofJson());
 			e.destId = "Capture";
 			notifyEvent(e);
+		}
+
 	}
 	void FamilyPortrait::exportImage(shared_ptr<ofFbo> fbo, string purpose, string filename, ofJson metaData)
 	{

@@ -1,13 +1,11 @@
 ofxAnimatable
 ofxAssetManager
-ofxCanon
+ofxGphoto
 ofxCv
 ofxEasing
 ofxFontStash2
-ofxInterface
-ofxInterfaceCanvas
 ofxModule
-ofxModuleCanon
+ofxModuleGphoto
 ofxModuleGreenscreen
 ofxModulePictureExporter
 ofxModuleWebcam

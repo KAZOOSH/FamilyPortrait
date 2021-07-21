@@ -2,11 +2,7 @@
 
 #include "ofMain.h"
 #include "ModuleDrawable.h"
-
-#include "ofxInterface.h"
-#include "Canvas.h"
-#include "TextureNode.h"
-#include "ColorPanel.h"
+#include "ofxEasing.h"
 
 namespace ofxModule {
 	struct ExportOption {
@@ -33,7 +29,6 @@ namespace ofxModule {
 	protected:
 		void proceedModuleEvent(ModuleEvent& e);
 
-		void updateLayerSorting();
 
 		void stopStream();
 		void startStream();
@@ -43,21 +38,18 @@ namespace ofxModule {
 
 	private:
 
-		ofxInterface::Node* scene;
-		ofxInterface::Canvas* canvas;
-		ofxInterface::ColorPanel* flash;
-
-		ofxInterface::TextureNode* camTexture;
+		std::deque<ofFbo> textures;
+		ofFbo camTexture;
 		
 		ofFbo imageFbo;
 
+		bool isStartCapture = false;
 		bool isCaptureRunning = false;
-		vector<ofFbo> fbos;
-		int currentLayer = 0;
 
 		vector<ExportOption> exportOptions;
 		
 		long lastphoto = 0;
+
 	};
 }
 

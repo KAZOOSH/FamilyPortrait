@@ -5,7 +5,12 @@
 #include "ofMain.h"
 #include "ModuleControl.h"
 
-#include "ofxModuleCanon.h"
+#ifdef TARGET_WIN32
+		#include "ofxModuleCanon.h"
+#elif defined( TARGET_OSX ) || defined( TARGET_LINUX )
+		#include "ofxModuleGphoto.h"
+#endif
+
 #include "ofxModuleWebcam.h"
 #include "ofxModuleGreenscreen.h"
 #include "ofxModulePictureExporter.h"

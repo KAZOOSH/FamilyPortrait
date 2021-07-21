@@ -10,8 +10,12 @@ void ofApp::setup(){
 	if (webModule.getModuleLoader()->getCountModulesConfig("Webcam")) {
 		webModule.getModuleLoader()->addModule(new ofxModuleWebcam("Capture", settingsPath));
 	}
-	if (webModule.getModuleLoader()->getCountModulesConfig("Canon")) {
+	if (webModule.getModuleLoader()->getCountModulesConfig("Camera")) {
+#ifdef TARGET_WIN32
 		webModule.getModuleLoader()->addModule(new ofxModuleCanon("Capture", settingsPath));
+#elif defined( TARGET_OSX ) || defined( TARGET_LINUX )
+		webModule.getModuleLoader()->addModule(new ofxModuleGphoto("Capture", settingsPath));
+#endif
 	}
 	if (webModule.getModuleLoader()->getCountModulesConfig("FamilyPortrait")) {
 		webModule.getModuleLoader()->addModule(new FamilyPortrait("FamilyPortrait", settingsPath));
