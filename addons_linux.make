@@ -3,7 +3,6 @@ ofxAssetManager
 ofxGphoto
 ofxCv
 ofxEasing
-ofxFontStash2
 ofxModule
 ofxModuleGphoto
 ofxModuleGreenscreen
