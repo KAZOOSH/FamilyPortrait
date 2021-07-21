@@ -26,6 +26,7 @@ Rename the ```addons_<system you are compiling on>.make``` to ```addons.make```.
 * [ofxModuleGreenscreen](https://github.com/reddoLabs/ofxModuleGreenscreen)
 * [ofxModulePictureExporter](https://github.com/reddoLabs/ofxModulePictureExporter)
 * [ofxModuleGreenscreen](https://github.com/reddoLabs/ofxModuleGreenscreen)
+* [ofxModuleWebcam](https://github.com/reddoLabs/ofxModuleWebcam)
 * [ofxVideoRecorder](https://github.com/brinoausrino/ofxVideoRecorder)
 * [ofxTextureRecorder](https://github.com/brinoausrino/ofxTextureRecorder)
 * on Windows : [ofxCanon](https://github.com/brinoausrino/ofxCanon)
